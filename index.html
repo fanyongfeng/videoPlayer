@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<style>
+  .tm-player {
+    width: 400px;height: 300px;
+    border: 1px solid red;
+  }
+</style>
+<body>
+  <div>
+    <video id="test"></video>
+  </div>
+  <script src="./dist/tmPlayer.js"></script>
+  <script>
+    window.onload = () => {
+      this.player = new Player({
+        id: 'test'
+      });
+      navigator.getUserMedia({
+        video: true,
+        audio: true
+      }, stream => {
+        this.player.srcObject = stream;
+      }, error => {
+        console.log(error);
+      });
+    }
+  </script>
+</body>
+</html>
