@@ -14,6 +14,29 @@ const defaultProps = {
   src: '',
 }
 
+const eventList = [{
+  origin: 'canplay',
+  instance: 'ready'
+}, {
+  origin: 'volumechange',
+  instance: 'volumechange'
+}, {
+  origin: 'play',
+  instance: 'play'
+}, {
+  origin: 'pause',
+  instance: 'pause'
+}, {
+  origin: 'loadeddata',
+  instance: 'loadeddata'
+}, {
+  origin: 'error',
+  instance: 'error'
+}, {
+  origin: 'durationchange',
+  instance: 'durationchange'
+}];
+
 const ROOT_CLASS = 'tm-player';
 
 class Player {
@@ -101,28 +124,6 @@ class Player {
   }
 
   setVideoEventListener() { //video origin event
-    const eventList = [{
-      origin: 'canplay',
-      instance: 'ready'
-    }, {
-      origin: 'volumechange',
-      instance: 'volumechange'
-    }, {
-      origin: 'play',
-      instance: 'play'
-    }, {
-      origin: 'pause',
-      instance: 'pause'
-    }, {
-      origin: 'loadeddata',
-      instance: 'loadeddata'
-    }, {
-      origin: 'error',
-      instance: 'error'
-    }, {
-      origin: 'durationchange',
-      instance: 'durationchange'
-    }];
     eventList.map(event => {
       this.video.addEventListener(event.origin, (...arg) => {
         this.emitEvent(event.instance, [...arg]);
