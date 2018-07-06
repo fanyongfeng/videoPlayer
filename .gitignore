@@ -1,6 +1,4 @@
 /node_modules
-/build
-/dist
 launch.json
 npm-debug.log
 yarn-error.log

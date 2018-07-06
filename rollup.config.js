@@ -23,7 +23,7 @@ export default {
       extensions: ['.js']
     }),
     less({
-      output: 'tmPlayer.css',
+      output: 'dist/tmPlayer.css',
       insert: true
     }),
     commonjs({
