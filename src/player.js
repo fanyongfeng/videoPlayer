@@ -29,13 +29,13 @@ class Player {
       control,
       muted
     } = options;
-    const event = new EventEmitter();
-    Player.prototype = Object.assign(Player.prototype, event.__proto__);
-    this.setErrorListener();
     this.checkParams({
       id,
       options
     });
+    const event = new EventEmitter();
+    Object.assign(Player.prototype, event.__proto__);
+    this.setErrorListener();
     this.video = findDom(`#${id}`);
     const option = {
       autoplay,
@@ -80,8 +80,16 @@ class Player {
     this.video.srcObject = stream;
   }
 
+  get currentTime() {
+    return this.video.currentTime;
+  }
+
+  set currentTime(time) {
+    this.video.currentTime = time;
+  }
+
   /**
-   *  creat root div, appent video in root
+   *  creat root div and controls, appent video in root
    */
   createVideoFrame() {
     this.root = this.video.parentElement;
@@ -120,14 +128,6 @@ class Player {
         this.emitEvent(event.instance, [...arg]);
       });
     })
-  }
-
-  get currentTime() {
-    return this.video.currentTime;
-  }
-
-  set currentTime(time) {
-    this.video.currentTime = time;
   }
 
   setErrorListener() {
