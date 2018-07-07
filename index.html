@@ -20,8 +20,10 @@
   <script>
     window.onload = () => {
       this.player = new Player({
-        id: 'test'
+        id: 'test',
+        poster: ['./poster.jpg']
       });
+      this.player.poster.show(true);
       navigator.getUserMedia({
         video: true,
         audio: true

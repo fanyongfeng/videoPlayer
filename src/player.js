@@ -4,14 +4,17 @@ import {
   createDom,
   addClass,
   removeClass,
-  setAttribute
+  setAttribute,
+  typeOf
 } from './utils/dom';
 import errorTypes from './utils/error';
 
 const defaultProps = {
   autoplay: true,
   control: false,
-  src: '',
+  muted: false,
+  poster: [], // array or string
+  src: ''
 }
 
 const eventList = [{
@@ -40,25 +43,22 @@ const eventList = [{
 const ROOT_CLASS = 'tm-player';
 
 class Player {
-  constructor({
-    id,
-    options
-  }) {
-    options = { ...defaultProps,
+  constructor(options) {
+    options = {
+      ...defaultProps,
       ...options
     };
+    this.options = options;
     const {
       autoplay,
       control,
-      muted
+      muted,
+      id
     } = options;
-    this.checkParams({
-      id,
-      options
-    });
     const event = new EventEmitter();
     Object.assign(Player.prototype, event.__proto__);
     this.setErrorListener();
+    this.checkParams(options);
     this.video = findDom(`#${id}`);
     const option = {
       autoplay,
@@ -70,14 +70,19 @@ class Player {
     } else {
       setAttribute(this.video, option)
     }
-    this.createVideoFrame();
-    this.setVideoEventListener();
+    this._createVideoFrame();
+    this._setVideoEventListener();
   }
 
   get muted() {
     return this.video.muted;
   }
 
+  /**
+   *
+   * @param {boolean} muted
+   * @memberof Player
+   */
   set muted(muted) {
     this.video.muted = muted;
   }
@@ -89,6 +94,19 @@ class Player {
     removeClass(this.root, ROOT_CLASS);
     this.removeEvent();
     this.video = null;
+  }
+
+  /**
+   *
+   *
+   * @param {string} poster
+   * @returns
+   * @memberof Player
+   */
+  setPoster(poster) {
+    if (typeOf(poster) !== 'string')
+      return;
+    this._posterImg.src = poster;
   }
 
   get srcObject() {
@@ -114,32 +132,56 @@ class Player {
   /**
    *  creat root div and controls, appent video in root
    */
-  createVideoFrame() {
+  _createVideoFrame() {
     this.root = this.video.parentElement;
     if (!this.root) {
-      this.emitEvent(errorTypes.warn, 'should creat a root dom');
-      return;
+      this.emitEvent('warn', 'should creat a root dom');
+      this.root = findDom('body');
     }
+    let posterUrl = this.options.poster;
+    if (typeOf(this.options.poster) === 'array') {
+      const length = this.options.poster;
+      posterUrl = this.options.poster[Math.floor(Math.random() * length)];
+    }
+    this._posterImg = createDom('img', '', {
+      src: posterUrl
+    }, 'poster');
+    this.poster = createDom('div', '', {}, 'poster-wrapper hide');
+    this
+      .poster
+      .appendChild(this._posterImg);
+    this
+      .root
+      .appendChild(this.poster);
     addClass(this.root, ROOT_CLASS);
+    this.poster.show = (visible) => {
+      !visible && addClass(this.poster, 'hide');
+      visible && removeClass(this.poster, 'hide');
+    }
   }
 
-  setVideoEventListener() { //video origin event
+  _setVideoEventListener() { //video origin event
     eventList.map(event => {
-      this.video.addEventListener(event.origin, (...arg) => {
-        this.emitEvent(event.instance, [...arg]);
-      });
+      this
+        .video
+        .addEventListener(event.origin, (...arg) => {
+          this.emitEvent(event.instance, [...arg]);
+        });
     })
   }
 
   setErrorListener() {
-    Object.keys(errorTypes).map(error => {
-      this.addListeners(error, () => errorTypes[error]())
-    });
+    Object
+      .keys(errorTypes)
+      .map(error => {
+        console.log(errorTypes[error])
+        this.addListeners(error, [errorTypes[error]]);
+      });
   }
 
   checkParams(props) {
     if (!props.id) {
-      this.emitEvent(errorTypes.warn, '缺少video Id');
+      this.emitEvent('error', ['must have a video Id']);
     }
   }
 }

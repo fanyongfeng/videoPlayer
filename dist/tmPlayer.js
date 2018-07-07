@@ -292,7 +292,7 @@ var bundle = (function () {
 	  return store[key] || (store[key] = value !== undefined ? value : {});
 	})('versions', []).push({
 	  version: _core.version,
-	  mode: _library ? 'pure' : 'global',
+	  mode: 'global',
 	  copyright: '© 2018 Denis Pushkarev (zloirock.ru)'
 	});
 	});
@@ -327,7 +327,7 @@ var bundle = (function () {
 
 	var defineProperty = _objectDp.f;
 	var _wksDefine = function (name) {
-	  var $Symbol = _core.Symbol || (_core.Symbol = _library ? {} : _global.Symbol || {});
+	  var $Symbol = _core.Symbol || (_core.Symbol = _global.Symbol || {});
 	  if (name.charAt(0) != '_' && !(name in $Symbol)) defineProperty($Symbol, name, { value: _wksExt.f(name) });
 	};
 
@@ -7270,22 +7270,28 @@ var bundle = (function () {
 	  var el = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
 	  return el.querySelector(sel);
 	};
+	var typeOf = function typeOf(obj) {
+	  return Object.prototype.toString.call(obj).match(/([^\s.*]+)(?=]$)/g)[0];
+	};
 
 	var errorTypes = {
 	  'log': function log(logMsg) {
-	    console.log(logMsg);
+	    return console.log("%cVIDEO Log '%s'", "color: green", logMsg);
 	  },
 	  'error': function error(msg) {
-	    console.error(msg);
+	    console.error("%cVIDEO Error: %s", "color: red", msg);
 	  },
 	  'warn': function warn(msg) {
-	    console.warn(msg);
+	    console.warn("%cVIDEO Warn '%s'", "color: #88CA3B", msg);
 	  }
 	};
 
 	var defaultProps = {
 	  autoplay: true,
 	  control: false,
+	  muted: false,
+	  poster: [],
+	  // array or string
 	  src: ''
 	};
 	var eventList = [{
@@ -7315,24 +7321,20 @@ var bundle = (function () {
 	var Player =
 	/*#__PURE__*/
 	function () {
-	  function Player(_ref) {
-	    var id = _ref.id,
-	        options = _ref.options;
-
+	  function Player(options) {
 	    _classCallCheck(this, Player);
 
 	    options = _objectSpread({}, defaultProps, options);
+	    this.options = options;
 	    var _options = options,
 	        autoplay = _options.autoplay,
 	        control = _options.control,
-	        muted = _options.muted;
-	    this.checkParams({
-	      id: id,
-	      options: options
-	    });
+	        muted = _options.muted,
+	        id = _options.id;
 	    var event$$1 = new EventEmitter();
 	    Object.assign(Player.prototype, event$$1.__proto__);
 	    this.setErrorListener();
+	    this.checkParams(options);
 	    this.video = findDom("#".concat(id));
 	    var option = {
 	      autoplay: autoplay,
@@ -7346,8 +7348,9 @@ var bundle = (function () {
 	      setAttribute(this.video, option);
 	    }
 
-	    this.createVideoFrame();
-	    this.setVideoEventListener();
+	    this._createVideoFrame();
+
+	    this._setVideoEventListener();
 	  }
 
 	  _createClass(Player, [{
@@ -7361,61 +7364,101 @@ var bundle = (function () {
 	      this.removeEvent();
 	      this.video = null;
 	    }
+	    /**
+	     *
+	     *
+	     * @param {string} poster
+	     * @returns
+	     * @memberof Player
+	     */
+
 	  }, {
-	    key: "createVideoFrame",
+	    key: "setPoster",
+	    value: function setPoster(poster) {
+	      if (typeOf(poster) !== 'string') return;
+	      this._posterImg.src = poster;
+	    }
+	  }, {
+	    key: "_createVideoFrame",
 
 	    /**
 	     *  creat root div and controls, appent video in root
 	     */
-	    value: function createVideoFrame() {
+	    value: function _createVideoFrame() {
+	      var _this = this;
+
 	      this.root = this.video.parentElement;
 
 	      if (!this.root) {
-	        this.emitEvent(errorTypes.warn, 'should creat a root dom');
-	        return;
+	        this.emitEvent('warn', 'should creat a root dom');
+	        this.root = findDom('body');
 	      }
 
+	      var posterUrl = this.options.poster;
+
+	      if (typeOf(this.options.poster) === 'array') {
+	        var length = this.options.poster;
+	        posterUrl = this.options.poster[Math.floor(Math.random() * length)];
+	      }
+
+	      this._posterImg = createDom('img', '', {
+	        src: posterUrl
+	      }, 'poster');
+	      this.poster = createDom('div', '', {}, 'poster-wrapper hide');
+	      this.poster.appendChild(this._posterImg);
+	      this.root.appendChild(this.poster);
 	      addClass(this.root, ROOT_CLASS);
+
+	      this.poster.show = function (visible) {
+	        !visible && addClass(_this.poster, 'hide');
+	        visible && removeClass(_this.poster, 'hide');
+	      };
 	    }
 	  }, {
-	    key: "setVideoEventListener",
-	    value: function setVideoEventListener() {
-	      var _this = this;
+	    key: "_setVideoEventListener",
+	    value: function _setVideoEventListener() {
+	      var _this2 = this;
 
 	      //video origin event
 	      eventList.map(function (event$$1) {
-	        _this.video.addEventListener(event$$1.origin, function () {
+	        _this2.video.addEventListener(event$$1.origin, function () {
 	          for (var _len = arguments.length, arg = new Array(_len), _key = 0; _key < _len; _key++) {
 	            arg[_key] = arguments[_key];
 	          }
 
-	          _this.emitEvent(event$$1.instance, arg.concat());
+	          _this2.emitEvent(event$$1.instance, arg.concat());
 	        });
 	      });
 	    }
 	  }, {
 	    key: "setErrorListener",
 	    value: function setErrorListener() {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      Object.keys(errorTypes).map(function (error) {
-	        _this2.addListeners(error, function () {
-	          return errorTypes[error]();
-	        });
+	        console.log(errorTypes[error]);
+
+	        _this3.addListeners(error, [errorTypes[error]]);
 	      });
 	    }
 	  }, {
 	    key: "checkParams",
 	    value: function checkParams(props) {
 	      if (!props.id) {
-	        this.emitEvent(errorTypes.warn, '缺少video Id');
+	        this.emitEvent('error', ['must have a video Id']);
 	      }
 	    }
 	  }, {
 	    key: "muted",
 	    get: function get() {
 	      return this.video.muted;
-	    },
+	    }
+	    /**
+	     *
+	     * @param {boolean} muted
+	     * @memberof Player
+	     */
+	    ,
 	    set: function set(muted) {
 	      this.video.muted = muted;
 	    }
@@ -7445,7 +7488,7 @@ var bundle = (function () {
 	  return Player;
 	}();
 
-	__$styleInject(".tm-player video {\n  width: 100;\n  height: 100%;\n}\n");
+	__$styleInject(".tm-player {\n  position: relative;\n}\n.tm-player video {\n  width: 100;\n  height: 100%;\n  position: relative;\n  z-index: 1;\n}\n.tm-player .poster-wrapper {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: #fff;\n  z-index: 2;\n  overflow: hidden;\n}\n.tm-player .poster-wrapper.hide {\n  display: none;\n}\n.tm-player .poster-wrapper img.poster {\n  width: 100%;\n  display: block;\n}\n");
 
 	window.Player = Player;
 

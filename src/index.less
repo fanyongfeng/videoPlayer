@@ -1,6 +1,26 @@
 .tm-player {
+  position: relative;
   video {
     width: 100;
     height: 100%;
+    position: relative;
+    z-index: 1;
+  }
+  .poster-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    z-index: 2;
+    overflow: hidden;
+    &.hide {
+      display: none;
+    }
+    img.poster {
+      width: 100%;
+      display: block;
+    }
   }
 }

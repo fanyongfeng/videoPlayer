@@ -2,3 +2,91 @@
   width: 100;
   height: 100%;
 }
+.tm-player {
+  position: relative;
+}
+.tm-player video {
+  width: 100;
+  height: 100%;
+}
+.tm-player .poster-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+}
+.tm-player {
+  position: relative;
+}
+.tm-player video {
+  width: 100;
+  height: 100%;
+}
+.tm-player .poster-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+}
+.tm-player .poster-wrapper.hide {
+  display: none;
+}
+.tm-player .poster-wrapper img.poster {
+  width: 100%;
+  display: block;
+}
+.tm-player {
+  position: relative;
+}
+.tm-player video {
+  width: 100;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+.tm-player .poster-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  z-index: 2;
+}
+.tm-player .poster-wrapper.hide {
+  display: none;
+}
+.tm-player .poster-wrapper img.poster {
+  width: 100%;
+  display: block;
+}
+.tm-player {
+  position: relative;
+}
+.tm-player video {
+  width: 100;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+.tm-player .poster-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  z-index: 2;
+  overflow: hidden;
+}
+.tm-player .poster-wrapper.hide {
+  display: none;
+}
+.tm-player .poster-wrapper img.poster {
+  width: 100%;
+  display: block;
+}
