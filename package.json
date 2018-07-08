@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "fabric": "^2.3.3",
+    "flv.js": "^1.4.2",
     "lodash": "^4.17.10",
     "rollup": "^0.61.2",
     "wolfy87-eventemitter": "^5.2.5"
