@@ -116,7 +116,7 @@ class Player {
 
   set srcObject(stream) {
     if (!stream) {
-      this.emitEvent(errorTypes.warn, 'no stream');
+      this.emitEvent('warn', 'no stream');
       return;
     }
     this.video.srcObject = stream;
