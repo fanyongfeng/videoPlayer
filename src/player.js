@@ -13,6 +13,7 @@ const defaultProps = {
   autoplay: true,
   control: false,
   muted: false,
+  scale: '16:9', // 视频比例
   poster: [], // array or string
   src: ''
 }
@@ -133,10 +134,12 @@ class Player {
    *  creat root div and controls, appent video in root
    */
   _createVideoFrame() {
-    this.root = this.video.parentElement;
-    if (!this.root) {
+    const wrapper = this.video.parentElement;
+    const scaleInfo = this.options.scale.split(":");
+    const scalePercent = scaleInfo[1] / scaleInfo[0]
+    if (!wrapper) {
       this.emitEvent('warn', 'should creat a root dom');
-      this.root = findDom('body');
+      wrapper = findDom('body');
     }
     let posterUrl = this.options.poster;
     if (typeOf(this.options.poster) === 'array') {
@@ -150,10 +153,12 @@ class Player {
     this
       .poster
       .appendChild(this._posterImg);
-    this
-      .root
-      .appendChild(this.poster);
+    this.root = createDom('div', '', {}, ROOT_CLASS);
+    this.root.appendChild(this.poster);
+    this.root.appendChild(this.video);
+    wrapper.appendChild(this.root);
     addClass(this.root, ROOT_CLASS);
+    this.root.style.paddingBottom = scalePercent * 100 + '%';
     this.poster.show = (visible) => {
       !visible && addClass(this.poster, 'hide');
       visible && removeClass(this.poster, 'hide');

@@ -6730,6 +6730,10 @@ var bundle = (function () {
 	  return target;
 	}
 
+	function _readOnlyError(name) {
+	  throw new Error("\"" + name + "\" is read-only");
+	}
+
 	var EventEmitter = createCommonjsModule(function (module) {
 	(function (exports) {
 
@@ -7290,6 +7294,8 @@ var bundle = (function () {
 	  autoplay: true,
 	  control: false,
 	  muted: false,
+	  scale: '16:9',
+	  // 视频比例
 	  poster: [],
 	  // array or string
 	  src: ''
@@ -7387,11 +7393,13 @@ var bundle = (function () {
 	    value: function _createVideoFrame() {
 	      var _this = this;
 
-	      this.root = this.video.parentElement;
+	      var wrapper = this.video.parentElement;
+	      var scaleInfo = this.options.scale.split(":");
+	      var scalePercent = scaleInfo[1] / scaleInfo[0];
 
-	      if (!this.root) {
+	      if (!wrapper) {
 	        this.emitEvent('warn', 'should creat a root dom');
-	        this.root = findDom('body');
+	        wrapper = (_readOnlyError("wrapper"), findDom('body'));
 	      }
 
 	      var posterUrl = this.options.poster;
@@ -7406,8 +7414,12 @@ var bundle = (function () {
 	      }, 'poster');
 	      this.poster = createDom('div', '', {}, 'poster-wrapper hide');
 	      this.poster.appendChild(this._posterImg);
+	      this.root = createDom('div', '', {}, ROOT_CLASS);
 	      this.root.appendChild(this.poster);
+	      this.root.appendChild(this.video);
+	      wrapper.appendChild(this.root);
 	      addClass(this.root, ROOT_CLASS);
+	      this.root.style.paddingBottom = scalePercent * 100 + '%';
 
 	      this.poster.show = function (visible) {
 	        !visible && addClass(_this.poster, 'hide');
@@ -7488,7 +7500,7 @@ var bundle = (function () {
 	  return Player;
 	}();
 
-	__$styleInject(".tm-player {\n  position: relative;\n}\n.tm-player video {\n  width: 100;\n  height: 100%;\n  position: relative;\n  z-index: 1;\n}\n.tm-player .poster-wrapper {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: #fff;\n  z-index: 2;\n  overflow: hidden;\n}\n.tm-player .poster-wrapper.hide {\n  display: none;\n}\n.tm-player .poster-wrapper img.poster {\n  width: 100%;\n  display: block;\n}\n");
+	__$styleInject(".tm-player {\n  position: relative;\n  width: 100%;\n  height: 0;\n  padding-bottom: 75%;\n  box-sizing: border-box;\n}\n.tm-player video {\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 1;\n}\n.tm-player .poster-wrapper {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: #fff;\n  z-index: 2;\n  overflow: hidden;\n}\n.tm-player .poster-wrapper.hide {\n  display: none;\n}\n.tm-player .poster-wrapper img.poster {\n  width: 100%;\n  display: block;\n}\n");
 
 	window.Player = Player;
 
