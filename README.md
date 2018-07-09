@@ -1,5 +1,7 @@
 # videoPlayer
 
+An HTML5 Video (flv/living stream/hls) Player 
+
 ## start
 
 rollup config rollup.config.js -c -w
