@@ -186,6 +186,7 @@ class Player {
 
   checkParams(props) {
     if (!props.id) {
+      7
       this.emitEvent('error', ['must have a video Id']);
     }
   }
