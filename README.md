@@ -14,6 +14,8 @@ const player = new Player({
   autoplay: 'false'
   ...
 })
+```
 - stram
+```
   player.srcObject = stream;
 ```
