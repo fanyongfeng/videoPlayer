@@ -15,7 +15,23 @@ const player = new Player({
   ...
 })
 ```
-- stram
+- stream
 ```
   player.srcObject = stream;
+```
+
+- mp4
+```
+  player.src = mp4Url;
+  //addeventlistener
+  player.addEventListener('ready', callback);
+  ...
+```
+
+- flv
+```
+```
+
+- hls
+```
 ```

@@ -7385,11 +7385,21 @@ var bundle = (function () {
 	      this._posterImg.src = poster;
 	    }
 	  }, {
-	    key: "_createVideoFrame",
-
+	    key: "pause",
+	    value: function pause() {
+	      this.video.pause();
+	    }
+	  }, {
+	    key: "play",
+	    value: function play() {
+	      this.video.play();
+	    }
 	    /**
 	     *  creat root div and controls, appent video in root
 	     */
+
+	  }, {
+	    key: "_createVideoFrame",
 	    value: function _createVideoFrame() {
 	      var _this = this;
 
@@ -7494,6 +7504,16 @@ var bundle = (function () {
 	    },
 	    set: function set(time) {
 	      this.video.currentTime = time;
+	    }
+	  }, {
+	    key: "src",
+	    set: function set(url) {
+	      this.options.src = url;
+	      this.video.setAttribute("src", url);
+	      this.video.load();
+	    },
+	    get: function get() {
+	      return this.options.src;
 	    }
 	  }]);
 

@@ -130,6 +130,24 @@ class Player {
     this.video.currentTime = time;
   }
 
+  set src(url) {
+    this.options.src = url;
+    this.video.setAttribute("src", url);
+    this.video.load();
+  }
+
+  get src() {
+    return this.options.src;
+  }
+
+  pause() {
+    this.video.pause();
+  }
+
+  play() {
+    this.video.play();
+  }
+
   /**
    *  creat root div and controls, appent video in root
    */
