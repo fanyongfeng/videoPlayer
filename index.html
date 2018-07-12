@@ -19,19 +19,21 @@
   <script src="./dist/tmPlayer.js"></script>
   <script>
     window.onload = () => {
-      this.player = new Player({
+      this.player = new FlvPlayer({
         id: 'test',
-        poster: ['./poster.jpg']
+        poster: ['./poster.jpg'],
+        src: 'https://www.mediacollege.com/video-gallery/testclips/20051210-w50s.flv'
       });
-      this.player.poster.show(true);
-      navigator.getUserMedia({
-        video: true,
-        audio: true
-      }, stream => {
-        this.player.srcObject = stream;
-      }, error => {
-        console.log(error);
-      });
+      this.player.poster.show(false);
+      window.player = this.player;
+      // navigator.getUserMedia({
+      //   video: true,
+      //   audio: true
+      // }, stream => {
+      //   this.player.srcObject = stream;
+      // }, error => {
+      //   console.log(error);
+      // });
     }
   </script>
 </body>

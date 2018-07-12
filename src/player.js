@@ -67,7 +67,7 @@ class Player {
       muted
     };
     if (!this.video) {
-      this.video = createDom('video', 'your browser don`t support HTML5 video tag', option);
+      this.video = createDom('video', 'your browser don`t support HTML5 video tag', option, 'video');
     } else {
       setAttribute(this.video, option)
     }

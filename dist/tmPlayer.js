@@ -1,4 +1,4 @@
-var bundle = (function () {
+var bundle = (function (exports) {
 	'use strict';
 
 	function __$styleInject(css) {
@@ -6730,6 +6730,53 @@ var bundle = (function () {
 	  return target;
 	}
 
+	function _inherits(subClass, superClass) {
+	  if (typeof superClass !== "function" && superClass !== null) {
+	    throw new TypeError("Super expression must either be null or a function");
+	  }
+
+	  subClass.prototype = Object.create(superClass && superClass.prototype, {
+	    constructor: {
+	      value: subClass,
+	      writable: true,
+	      configurable: true
+	    }
+	  });
+	  if (superClass) _setPrototypeOf(subClass, superClass);
+	}
+
+	function _getPrototypeOf(o) {
+	  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+	    return o.__proto__ || Object.getPrototypeOf(o);
+	  };
+	  return _getPrototypeOf(o);
+	}
+
+	function _setPrototypeOf(o, p) {
+	  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+	    o.__proto__ = p;
+	    return o;
+	  };
+
+	  return _setPrototypeOf(o, p);
+	}
+
+	function _assertThisInitialized(self) {
+	  if (self === void 0) {
+	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+	  }
+
+	  return self;
+	}
+
+	function _possibleConstructorReturn(self, call) {
+	  if (call && (typeof call === "object" || typeof call === "function")) {
+	    return call;
+	  }
+
+	  return _assertThisInitialized(self);
+	}
+
 	function _readOnlyError(name) {
 	  throw new Error("\"" + name + "\" is read-only");
 	}
@@ -7349,7 +7396,7 @@ var bundle = (function () {
 	    };
 
 	    if (!this.video) {
-	      this.video = createDom('video', 'your browser don`t support HTML5 video tag', option);
+	      this.video = createDom('video', 'your browser don`t support HTML5 video tag', option, 'video');
 	    } else {
 	      setAttribute(this.video, option);
 	    }
@@ -7520,11 +7567,73 @@ var bundle = (function () {
 	  return Player;
 	}();
 
-	__$styleInject(".tm-player {\n  position: relative;\n  width: 100%;\n  height: 0;\n  padding-bottom: 75%;\n  box-sizing: border-box;\n}\n.tm-player video {\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 1;\n}\n.tm-player .poster-wrapper {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: #fff;\n  z-index: 2;\n  overflow: hidden;\n}\n.tm-player .poster-wrapper.hide {\n  display: none;\n}\n.tm-player .poster-wrapper img.poster {\n  width: 100%;\n  display: block;\n}\n");
+	var FlvPlayer =
+	/*#__PURE__*/
+	function (_Player) {
+	  _inherits(FlvPlayer, _Player);
+
+	  function FlvPlayer(options) {
+	    var _this;
+
+	    _classCallCheck(this, FlvPlayer);
+
+	    _this = _possibleConstructorReturn(this, _getPrototypeOf(FlvPlayer).call(this, options));
+
+	    _this.renderSwfFrame();
+
+	    return _this;
+	  }
+
+	  _createClass(FlvPlayer, [{
+	    key: "renderSwfFrame",
+	    value: function renderSwfFrame() {
+	      this.root.removeChild(this.video);
+	      this.video = createDom('object', '', {
+	        type: 'application/x-shockwave-flash',
+	        width: '100%'
+	      }, 'video');
+	      var param1 = createDom('param', '', {
+	        name: 'movie',
+	        value: '/src/assets/player.swf' // value: swf
+
+	      });
+	      var param2 = createDom('param', '', {
+	        name: 'wmode',
+	        value: 'opaque'
+	      });
+	      var param3 = createDom('param', '', {
+	        name: 'src',
+	        value: this.options.src
+	      });
+	      this.video.appendChild(param1);
+	      this.video.appendChild(param2);
+	      this.video.appendChild(param3);
+
+	      if (this.options.autoplay) {
+	        var param = createDom('param', '', {
+	          name: 'autoplay',
+	          value: true
+	        });
+	        this.video.appendChild(param);
+	      }
+
+	      this.root.appendChild(this.video);
+	    }
+	  }]);
+
+	  return FlvPlayer;
+	}(Player);
+
+	__$styleInject(".tm-player {\n  position: relative;\n  width: 100%;\n  height: 0;\n  padding-bottom: 75%;\n  box-sizing: border-box;\n}\n.tm-player .video {\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 1;\n}\n.tm-player .poster-wrapper {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: #fff;\n  z-index: 2;\n  overflow: hidden;\n}\n.tm-player .poster-wrapper.hide {\n  display: none;\n}\n.tm-player .poster-wrapper img.poster {\n  width: 100%;\n  display: block;\n}\n");
 
 	window.Player = Player;
+	var FlvPlayer$1 = FlvPlayer;
+	window.FlvPlayer = FlvPlayer$1;
 
-	return Player;
+	exports.default = Player;
+	exports.FlvPlayer = FlvPlayer$1;
 
-}());
+	return exports;
+
+}({}));
 //# sourceMappingURL=tmPlayer.js.map

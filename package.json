@@ -35,7 +35,8 @@
     "rollup-plugin-node-globals": "^1.2.1",
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-postcss": "^1.6.2",
-    "rollup-plugin-serve": "^0.4.2"
+    "rollup-plugin-serve": "^0.4.2",
+    "rollup-plugin-url": "^1.4.0"
   },
   "dependencies": {
     "fabric": "^2.3.3",

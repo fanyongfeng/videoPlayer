@@ -3017,6 +3017,10 @@ mime@^1.2.11, mime@^1.3.6, mime@^1.4.1:
   version "1.6.0"
   resolved "http://registry.npm.taobao.org/mime/download/mime-1.6.0.tgz#32cd9e5c64553bd58d19a568af452acff04981b1"
 
+mime@^2.3.1:
+  version "2.3.1"
+  resolved "http://registry.npm.taobao.org/mime/download/mime-2.3.1.tgz#b1621c54d63b97c47d3cfe7f7215f7d64517c369"
+
 mimic-fn@^1.0.0:
   version "1.2.0"
   resolved "http://registry.npm.taobao.org/mimic-fn/download/mimic-fn-1.2.0.tgz#820c86a39334640e99516928bd03fca88057d022"
@@ -3959,6 +3963,13 @@ rollup-plugin-serve@^0.4.2:
   dependencies:
     mime "^1.3.6"
     opener "^1.4.3"
+
+rollup-plugin-url@^1.4.0:
+  version "1.4.0"
+  resolved "http://registry.npm.taobao.org/rollup-plugin-url/download/rollup-plugin-url-1.4.0.tgz#346124cad853267b324cba0991f10bfd4be60c65"
+  dependencies:
+    mime "^2.3.1"
+    rollup-pluginutils "^2.0.1"
 
 rollup-pluginutils@^1.5.1:
   version "1.5.2"

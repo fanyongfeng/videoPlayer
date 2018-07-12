@@ -5,6 +5,11 @@ import resolve from 'rollup-plugin-node-resolve';
 import globals from 'rollup-plugin-node-globals';
 import eslint from 'rollup-plugin-eslint';
 import less from 'rollup-plugin-less';
+import url from "rollup-plugin-url"
+
+const writeoptions = {
+  dest: "dist/assets"
+}
 
 export default {
   input: 'src/index.js',
@@ -12,7 +17,8 @@ export default {
     file: 'dist/tmPlayer.js',
     format: 'iife',
     name: 'bundle',
-    sourcemap: true
+    sourcemap: true,
+    exports: 'named'
   },
   plugins: [
     resolve({
@@ -42,6 +48,12 @@ export default {
       host: 'localhost',
       port: 10001,
     }),
-    globals()
+    globals(),
+    url({
+      output: './',
+      limit: 5 * 1024, // inline files < 10k, copy files > 10k
+      include: ["**/*.swf"], // defaults to .svg, .png, .jpg and .gif files
+      emitFiles: true // defaults to true
+    })
   ]
 };
