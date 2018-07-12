@@ -17,7 +17,8 @@ class FlvPlayer extends Player {
   renderSwfFrame() {
     this.root.removeChild(this.video);
     this.video = createDom('object', '', {
-      type: 'application/x-shockwave-flash',
+      // data: '/src/assets/player.swf',
+      // type: 'application/x-shockwave-flash',
       width: '100%',
     }, 'video');
     const param1 = createDom('param', '', {
@@ -33,10 +34,24 @@ class FlvPlayer extends Player {
       name: 'src',
       value: this.options.src
     });
+    const param4 = createDom('param', '', {
+      name: 'allowFullScreen',
+      value: true
+    });
+    const param5 = createDom('embed', '', {
+      swliveconnect: true,
+      name: 'flashplayer',
+      src: '/src/assets/player.swf',
+      type: 'application/x-shockwave-flash',
+      width: '100%',
+
+    });
 
     this.video.appendChild(param1);
     this.video.appendChild(param2);
     this.video.appendChild(param3);
+    this.video.appendChild(param4);
+    this.video.appendChild(param5);
     if (this.options.autoplay) {
       const param = createDom('param', '', {
         name: 'autoplay',
