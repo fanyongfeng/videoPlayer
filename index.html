@@ -19,10 +19,10 @@
   <script src="./dist/tmPlayer.js"></script>
   <script>
     window.onload = () => {
-      this.player = new FlvPlayer({
+      this.player = new HlsPlayer({
         id: 'test',
         poster: ['./poster.jpg'],
-        src: 'https://www.mediacollege.com/video-gallery/testclips/20051210-w50s.flv'
+        // src: 'https://www.mediacollege.com/video-gallery/testclips/20051210-w50s.flv'
       });
       this.player.poster.show(false);
       window.player = this.player;

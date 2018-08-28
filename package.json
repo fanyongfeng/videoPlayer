@@ -39,6 +39,7 @@
     "rollup-plugin-url": "^1.4.0"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "fabric": "^2.3.3",
     "flv.js": "^1.4.2",
     "lodash": "^4.17.10",
