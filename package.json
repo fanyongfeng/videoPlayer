@@ -43,7 +43,9 @@
     "fabric": "^2.3.3",
     "flv.js": "^1.4.2",
     "lodash": "^4.17.10",
+    "qs": "^6.5.2",
     "rollup": "^0.61.2",
+    "videojs-mux": "^2.4.0",
     "wolfy87-eventemitter": "^5.2.5"
   }
 }

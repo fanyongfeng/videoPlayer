@@ -22,6 +22,8 @@
       this.player = new HlsPlayer({
         id: 'test',
         poster: ['./poster.jpg'],
+        autoPlay: false,
+        control: true
         // src: 'https://www.mediacollege.com/video-gallery/testclips/20051210-w50s.flv'
       });
       this.player.poster.show(false);

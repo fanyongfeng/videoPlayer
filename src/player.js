@@ -10,7 +10,7 @@ import {
 import errorTypes from './utils/error';
 
 const defaultProps = {
-  autoplay: true,
+  autoplay: false,
   control: false,
   muted: false,
   scale: '16:9', // 视频比例
@@ -58,7 +58,7 @@ class Player {
     } = options;
     const event = new EventEmitter();
     Object.assign(Player.prototype, event.__proto__);
-    this.setErrorListener();
+    // this.setErrorListener();
     this.checkParams(options);
     this.video = findDom(`#${id}`);
     const option = {
@@ -187,8 +187,8 @@ class Player {
     eventList.map(event => {
       this
         .video
-        .addEventListener(event.origin, (...arg) => {
-          this.emitEvent(event.instance, [...arg]);
+        .addEventListener(event.origin, () => {
+          this.emitEvent(event.instance, arguments);
         });
     })
   }

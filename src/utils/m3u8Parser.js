@@ -1,5 +1,4 @@
-const MASTER_PLAYLIST_REGEX = /#EXT-X-STREAM-INF:([^\n\r]*)[\r\n]+([^\r\n]+)/g;
-const MASTER_PLAYLIST_MEDIA_REGEX = /#EXT-X-MEDIA:(.*)/g;
+import qs from 'qs';
 
 const LEVEL_PLAYLIST_REGEX_FAST = new RegExp([
   /#EXTINF:\s*(\d*(?:\.\d+)?)(?:,(.*)\s+)?/.source, // duration (#EXTINF:<duration>,<title>), group 1 => duration, group 2 => title
@@ -14,4 +13,32 @@ const LEVEL_PLAYLIST_REGEX_SLOW = /(?:(?:#(EXTM3U))|(?:#EXT-X-(PLAYLIST-TYPE):(.
 const MP4_REGEX_SUFFIX = /\.(mp4|m4s|m4v|m4a)$/i;
 
 
-export const parserM3u8Index = (data) => data.match(LEVEL_PLAYLIST_REGEX_FAST)
+export const parserM3u8Index = (data) => {
+  const list = data.match(LEVEL_PLAYLIST_REGEX_FAST);
+  let result  = [];
+  if (list && list[0] === "#EXTM3U") {
+    list.forEach((item, index) => {
+      if (item.indexOf('NAME') > -1) {
+        const info = qs.parse(item.split(':')[1], { delimiter: ',' });
+        const url = list[index + 1];
+        result.push({...info, url});
+      }
+    });
+  }
+  return result;
+}
+
+export const parserM3u8Ts = (data) => {
+  const list = data.match(LEVEL_PLAYLIST_REGEX_FAST);
+  let result  = [];
+  if (list && list[0] === "#EXTM3U") {
+    list.forEach((item, index) => {
+      if (item.indexOf('EXTINF') > -1) {
+        const duration = parseInt(item.split(':')[1], 10);
+        const url = list[index + 1];
+        result.push({duration, url});
+      }
+    });
+  }
+  return result;
+}
