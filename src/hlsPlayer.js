@@ -41,7 +41,7 @@ class HlsPlayer extends Player {
         bytes.set(remuxedSegs[j].data, i);
         i += remuxedSegs[j].byteLength;
       }
-      this.sourceBuffer.appendBuffer(bytes);
+      this.mediaSource.sourceBuffers[0].appendBuffer(bytes);
     });
   }
 
@@ -59,11 +59,9 @@ class HlsPlayer extends Player {
     this.mediaSource = new MediaSource();
     this.video.src = URL.createObjectURL(this.mediaSource);
     this.mediaSource.addEventListener('sourceopen', this.handleSourceOpen);
-    window.mediaSource = this.mediaSource;
   }
 
   handleSourceOpen = (e) => {
-    mediaSource.duration = 0;
     const sourceBuffer = this.mediaSource.addSourceBuffer(mime);
     sourceBuffer.mode = 'segments'; 
     this.sourceBuffer = sourceBuffer;

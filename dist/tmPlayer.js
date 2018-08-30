@@ -17844,8 +17844,6 @@ var bundle = (function (exports) {
 	    _this = _possibleConstructorReturn(this, _getPrototypeOf(HlsPlayer).call(this, options));
 
 	    _this.handleSourceOpen = function (e) {
-	      mediaSource.duration = 0;
-
 	      var sourceBuffer = _this.mediaSource.addSourceBuffer(mime);
 
 	      sourceBuffer.mode = 'segments';
@@ -17912,7 +17910,7 @@ var bundle = (function (exports) {
 	        i += remuxedSegs[j].byteLength;
 	      }
 
-	      _this.sourceBuffer.appendBuffer(bytes);
+	      _this.mediaSource.sourceBuffers[0].appendBuffer(bytes);
 	    });
 
 	    return _this;
@@ -17931,7 +17929,6 @@ var bundle = (function (exports) {
 	      this.mediaSource = new MediaSource();
 	      this.video.src = URL.createObjectURL(this.mediaSource);
 	      this.mediaSource.addEventListener('sourceopen', this.handleSourceOpen);
-	      window.mediaSource = this.mediaSource;
 	    }
 	  }, {
 	    key: "fetchSegmentAndAppend",
